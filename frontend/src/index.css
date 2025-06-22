@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased bg-gray-950 text-gray-100 min-h-screen;
+    overflow-x: hidden;
+  }
+  
+  #root {
+    @apply min-h-screen w-full;
+  }
+}
+
+/* Add these modal-specific styles */
+.modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Ensure body doesn't scroll when modal is open */
+body.modal-open {
+  overflow: hidden !important;
+}
+
+/* Override any other z-index on the page when modal is open */
+body.modal-open * {
+  z-index: 1 !important;
+}
+
+body.modal-open .fixed[style*="999998"],
+body.modal-open .fixed[style*="999999"] {
+  z-index: 999998 !important;
+}
+
+body.modal-open .fixed[style*="999999"] {
+  z-index: 999999 !important;
+}
+
+/* Force footer to stay below modals */
+footer {
+  position: relative;
+  z-index: 10 !important;
+}
+
+/* Ensure modals are always on top */
+[role="dialog"], .modal-backdrop {
+  z-index: 50000 !important;
+}
+
+/* Fix for the specific modal */
+.fixed[style*="z-index: 9998"],
+.fixed[style*="z-index: 9999"] {
+  z-index: 50000 !important;
+}
+
+@layer components {
+  .btn-primary {
+    @apply relative bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold 
+    hover:from-cyan-400 hover:to-blue-500 transition-all duration-300 
+    shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40
+    disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden
+    before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full
+    before:bg-white before:opacity-0 hover:before:opacity-20 before:transition-opacity;
+  }
+  
+  .btn-secondary {
+    @apply relative bg-gray-800 text-gray-100 px-6 py-3 rounded-lg font-semibold 
+    border border-gray-700 hover:border-gray-600 hover:bg-gray-700 
+    transition-all duration-300 shadow-lg hover:shadow-xl;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg 
+    focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent
+    text-gray-100 placeholder-gray-500 transition-all duration-300;
+  }
+
+  .glass-effect {
+    @apply bg-gray-900/50 backdrop-blur-xl border border-gray-800/50;
+  }
+
+  .neon-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  }
+
+  .card-hover {
+    @apply transform transition-all duration-300 hover:scale-105 hover:-translate-y-2;
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #00ffff; }
+  50% { box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; }
+  100% { box-shadow: 0 0 5px #00ffff; }
+}
+
+@keyframes pulse-neon {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-neon {
+  animation: pulse-neon 2s ease-in-out infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-b from-cyan-500 to-blue-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply from-cyan-400 to-blue-500;
+}
+
+/* Remove default link styles */
+a {
+  @apply no-underline;
+  color: inherit;
+}
+
+/* Remove default button styles */
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Ensure images don't exceed their containers */
+img {
+  @apply max-w-full h-auto;
+}
