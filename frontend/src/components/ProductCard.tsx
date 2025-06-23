@@ -5,7 +5,7 @@ interface Product {
   id: number;
   name: string;
   price: number;
-  image_url?: string;
+  image?: string;
   category?: {
     name: string;
   };
@@ -16,16 +16,20 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  console.log("product",product.image);
+  
   return (
     <div className="group relative">
+      
       {/* Glow effect on hover */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-75 blur transition duration-500"></div>
       
       <div className="relative glass-effect border border-gray-800 rounded-2xl overflow-hidden card-hover">
         <Link to={`/products/${product.id}`} className="block">
           <div className="relative h-56 overflow-hidden">
+          
             <img
-              src={product.image_url || 'https://via.placeholder.com/300'}
+              src={`http://127.0.0.1:8000${product.image}` || 'https://via.placeholder.com/300'}
               alt={product.name}
               className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
             />
