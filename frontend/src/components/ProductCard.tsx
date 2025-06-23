@@ -29,7 +29,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="relative h-56 overflow-hidden">
           
             <img
-              src={`http://127.0.0.1:8000${product.image}` || 'https://via.placeholder.com/300'}
+              src={`${import.meta.env.VITE_API_URL}${product.image}` || 'https://via.placeholder.com/300'}
               alt={product.name}
               className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
             />

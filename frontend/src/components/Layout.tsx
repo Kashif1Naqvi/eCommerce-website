@@ -2,6 +2,8 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { ShoppingCart, User, LogOut, Sparkles, Menu, X, Home, Package, ShoppingBag, UserCircle, Tag } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { cartAPI } from '../lib/api';
 
 interface LayoutProps {
   children: ReactNode;
@@ -13,6 +15,16 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  // Fetch cart data to get item count
+  const { data: cart } = useQuery({
+    queryKey: ['cart'],
+    queryFn: cartAPI.get,
+    enabled: !!user, // Only fetch if user is logged in
+  });
+
+  // Calculate total items in cart
+  const cartItemCount = cart?.data?.items?.reduce((total, item) => total + item.quantity, 0) || 0;
 
   useEffect(() => {
     checkAuth();
@@ -85,12 +97,14 @@ export default function Layout({ children }: LayoutProps) {
               {/* Cart Icon with Badge */}
               <Link
                 to="/cart"
-                className="relative p-3 rounded-lg text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 transition-all duration-300"
+                className="relative p-3 rounded-lg text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 transition-all duration-300 group"
               >
-                <ShoppingCart size={24} />
-                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center animate-pulse">
-                  0
-                </span>
+                <ShoppingCart size={24} className="group-hover:animate-pulse" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center animate-pulse shadow-[0_0_10px_rgba(6,182,212,0.5)]">
+                    {cartItemCount > 99 ? '99+' : cartItemCount}
+                  </span>
+                )}
               </Link>
 
               {user ? (
