@@ -25,7 +25,7 @@ export const authAPI = {
   
   login: (data: { username: string; password: string }) => {
     // Create form data for OAuth2
-    const formData = new URLSearchParams();
+    const formData = new URLSearchParams();  
     formData.append('username', data.username);
     formData.append('password', data.password);
     
