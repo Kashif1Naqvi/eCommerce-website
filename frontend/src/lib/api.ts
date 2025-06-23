@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -25,7 +25,7 @@ export const authAPI = {
   
   login: (data: { username: string; password: string }) => {
     // Create form data for OAuth2
-    const formData = new URLSearchParams();
+    const formData = new URLSearchParams();  
     formData.append('username', data.username);
     formData.append('password', data.password);
     
@@ -41,48 +41,17 @@ export const authAPI = {
 
 // Products API
 export const productsAPI = {
-  getAll: (params?: {
-    skip?: number;
-    limit?: number;
-    category_id?: number;
-    search?: string;
-    min_price?: number;
-    max_price?: number;
-    sort_by?: string;
-    order?: string;
-    featured_only?: boolean;
-  }) => api.get('/products', { params }),
-  
+  getAll: (params?: any) => api.get('/products', { params }),
   getById: (id: number) => api.get(`/products/${id}`),
-  
-  getFeatured: (limit?: number) => api.get('/products/featured', { params: { limit } }),
-  
   create: (data: any) => api.post('/products', data),
-  
   update: (id: number, data: any) => api.put(`/products/${id}`, data),
-  
-  delete: (id: number, permanent?: boolean) => 
-    api.delete(`/products/${id}`, { params: { permanent } }),
-  
-  restore: (id: number) => api.post(`/products/${id}/restore`),
-  
-  toggleFeatured: (id: number) => api.put(`/products/${id}/toggle-featured`),
-  
+  delete: (id: number) => api.delete(`/products/${id}`),
   uploadImage: (id: number, formData: FormData) => 
     api.post(`/products/${id}/upload-image`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     }),
-  
-  createReview: (productId: number, data: { rating: number; comment?: string }) =>
-    api.post(`/products/${productId}/reviews`, data),
-  
-  updateReview: (reviewId: number, data: { rating: number; comment?: string }) =>
-    api.put(`/products/reviews/${reviewId}`, data),
-  
-  deleteReview: (reviewId: number) => api.delete(`/products/reviews/${reviewId}`),
-  
-  getReviews: (productId: number, params?: { skip?: number; limit?: number }) =>
-    api.get(`/products/${productId}/reviews`, { params }),
 };
 
 // Categories API
