@@ -70,6 +70,18 @@ export default function ProductDetail() {
     });
   };
 
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    addReviewMutation.mutate({
+      rating: parseInt(rating),
+      comment: comment.trim() || undefined,
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="animate-pulse">
@@ -99,7 +111,7 @@ export default function ProductDetail() {
         {/* Product Image */}
         <div>
           <img
-            src={product.data.image_url || 'https://via.placeholder.com/400'}
+            src={`${import.meta.env.VITE_API_URL}${product.data.image}` || 'https://via.placeholder.com/400'}
             alt={product.data.name}
             className="w-full h-96 object-cover rounded-lg"
           />
@@ -168,37 +180,37 @@ export default function ProductDetail() {
 
         {/* Add Review Form */}
         {user && (
-          <form onSubmit={handleAddReview} className="bg-gray-50 p-4 rounded-lg mb-6">
-            <h3 className="font-semibold mb-2">Write a Review</h3>
-            <div className="mb-3">
-              <label className="block text-sm font-medium mb-1">Rating</label>
-              <div className="flex gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => setRating(star)}
-                    className="p-1"
-                  >
-                    <Star
-                      size={24}
-                      className={star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
-                    />
-                  </button>
-                ))}
-              </div>
+          <form onSubmit={handleReviewSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="rating">Rating</label>
+              <select
+                id="rating"
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+                className="input-futuristic"
+                required
+              >
+                <option value="">Select a rating</option>
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Good</option>
+                <option value="3">3 - Average</option>
+                <option value="2">2 - Poor</option>
+                <option value="1">1 - Terrible</option>
+              </select>
             </div>
-            <div className="mb-3">
-              <label className="block text-sm font-medium mb-1">Comment (optional)</label>
+            <div>
+              <label htmlFor="comment">Your Review</label>
               <textarea
-                className="input-field"
-                rows={3}
+                id="comment"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Share your thoughts about this product..."
+                rows={4}
+                className="input-futuristic"
+                placeholder="Share your experience with this product..."
+                required
               />
             </div>
-            <button type="submit" className="btn-primary" disabled={addReviewMutation.isPending}>
+            <button type="submit" className="btn-primary">
               Submit Review
             </button>
           </form>

@@ -603,21 +603,35 @@ export default function ProductManagement() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-2">Category</label>
-                <select
-                  value={productForm.category_id}
-                  onChange={(e) => setProductForm({ ...productForm, category_id: e.target.value })}
-                  className="input-field w-full"
-                >
-                  <option value="">No Category</option>
-                  {categories?.data.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+                <label className="block text-sm font-medium mb-2 text-cyan-400 uppercase tracking-wider">Category</label>
+                <div className="">
+                  <select
+                    value={productForm.category_id}
+                    onChange={(e) => setProductForm({ ...productForm, category_id: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-900/90 border border-cyan-500/30 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all duration-300 hover:border-cyan-400/50 cursor-pointer appearance-none pr-10"
+                    style={{
+                      WebkitAppearance: 'none',
+                      MozAppearance: 'none',
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2306b6d4' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 1rem center',
+                      color:"red !important",
+                    }}
+                  >
+                    <option value="" className="bg-gray-900 text-gray-400">Select Category</option>
+                    {categories?.data.map((cat) => (
+                      <option key={cat.id} value={cat.id} className="bg-gray-900 text-white">
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
               </div>
-              
               <div>
                 <label className="flex items-center space-x-2 cursor-pointer">
                   <input
